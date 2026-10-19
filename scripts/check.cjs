@@ -1,0 +1,3 @@
+const fs=require('node:fs');const path=require('node:path');const {spawnSync}=require('node:child_process');let failed=false;
+function check(folder){if(!fs.existsSync(folder))return;for(const entry of fs.readdirSync(folder,{withFileTypes:true})){const filename=path.join(folder,entry.name);if(entry.isDirectory()){check(filename);continue;}if(!/\.(c?js|mjs)$/.test(entry.name))continue;const r=spawnSync(process.execPath,['--check',filename],{encoding:'utf8'});if(r.status!==0){process.stderr.write(r.stderr);failed=true;}}}
+for(const folder of ['electron','lib','renderer','integrations','scripts','tests'])check(folder);if(failed)process.exit(1);console.log('JavaScript syntax checks passed.');

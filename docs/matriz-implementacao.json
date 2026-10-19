@@ -1,0 +1,2395 @@
+{
+  "formato": "lume.matriz-implementacao",
+  "versao": 1,
+  "aplicativo": "Lume",
+  "versao_aplicativo": "0.2.0",
+  "plataforma": "Windows x64",
+  "data": "2026-10-19",
+  "escopo": "Mesmos 102 identificadores da comparação anterior; a versão pessoal usa implementação própria e escolhas do plano, sem equivalência integral a serviços privados ou outras plataformas.",
+  "total": 102,
+  "contagens": {
+    "implementado": 58,
+    "fora do escopo": 15,
+    "adaptado": 29
+  },
+  "definicoes": {
+    "implementado": "Capacidade implementada no código; disponibilidade e validação são campos separados.",
+    "adaptado": "Entrega com escolha arquitetural, limite de escopo ou substituição descrita; não representa paridade integral.",
+    "fora do escopo": "Exclusão explícita do plano, capacidade original não comprovada como obrigatória ou específica de outra plataforma."
+  },
+  "tipos_de_verificacao": {
+    "real": "Componente/Electron/runtime executado com dados de teste, ou conta real quando explicitamente indicada. Não significa hardware/conta reais em todas as linhas.",
+    "unitário": "Teste automatizado de lógica e contratos.",
+    "simulado": "Respostas/API/identidades/dependências foram simuladas.",
+    "pendente": "Validação de conta, hardware, instalação física ou outro cenário ainda necessária."
+  },
+  "observacoes": [
+    "Conta ChatGPT real autorizada validou catálogo, streaming, resumo persistente, encerramento, execução de memory_search_sessions e pesquisa web com citação oficial clicável.",
+    "Google/Notion e serviços MCP de contas pessoais reais permanecem pendentes de configuração/consentimento.",
+    "Auxiliar WASAPI/NAudio bloqueado pelo Controle de Aplicativo; alternativa Chromium exercitada com arquivo de fala e Whisper persistente, sem gravação física.",
+    "System.Speech Windows sintetizou WAV em memória e cancelou; reprodução audível física não foi comprovada.",
+    "Whisper CPU e geração llama.cpp CPU exercitados. Runtime Vulkan incluído, sem geração Vulkan validada.",
+    "Histórico, credenciais e caminhos locais não são sincronizados.",
+    "Captura de tela usa fila lógica no processo principal, sem worker nativo isolado.",
+    "Instalação/upgrade físicos, monitores/DPI e suspensão não foram declarados aprovados."
+  ],
+  "itens": [
+    {
+      "id": "AM01",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Login com conta ChatGPT sem chave de API",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "OAuth ChatGPT sem chave preservado; conta real autorizada validou catálogo, streaming, resumo/encerramento, ferramenta de memória e pesquisa web.",
+      "fontes": [
+        "lib/chatgpt-auth.cjs",
+        "lib/responses.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "real"
+        ],
+        "evidencias": [
+          "tests/core.test.cjs",
+          "tests/responses.test.cjs"
+        ],
+        "limites": "Validação nesta conta/modelo; limites prolongados e outras contas/workspaces permanecem dependentes da autorização e elegibilidade. Testes OAuth e de capacidades usam fixtures; testes reais de conta foram separados conforme descrito na linha."
+      }
+    },
+    {
+      "id": "AM02",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Renovação e proteção local de credenciais ChatGPT",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "safeStorage, renovação serializada e rotação/revogação de credenciais por perfil.",
+      "fontes": [
+        "lib/chatgpt-auth.cjs",
+        "lib/responses.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/core.test.cjs",
+          "tests/responses.test.cjs"
+        ],
+        "limites": "Testes OAuth e de capacidades usam fixtures; testes reais de conta foram separados conforme descrito na linha."
+      }
+    },
+    {
+      "id": "AM03",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Alternar entre contas ChatGPT",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "Alternador de contas e isolamento de sessões, conexões e preferências.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/chatgpt-auth.cjs",
+        "lib/session-service.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "IPC/SQLite reais com dados isolados; alternância automatizada entre contas usa identidades sintéticas."
+      }
+    },
+    {
+      "id": "AM04",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "OpenAI por chave própria (opcional)",
+      "estado_anterior": "ausente",
+      "estado": "fora do escopo",
+      "entrega": "Chave própria OpenAI excluída: conta ChatGPT ou modelos locais.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "AM05",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Endpoints personalizados para modelos de IA",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Ollama, llama.cpp e endpoint compatível restritos ao próprio computador.",
+      "fontes": [
+        "lib/local-engine.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Cloud/LAN e cabeçalhos/credenciais arbitrários de provedor remoto não fazem parte da versão pessoal. Qwen2.5 0.5B gerou resposta real na CPU. Runtime Vulkan presente; geração Vulkan e hardware correspondente não validados."
+      }
+    },
+    {
+      "id": "AM07",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Escolher esforço de raciocínio na geração ChatGPT/Codex",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Esforço de raciocínio configurável no caminho ChatGPT.",
+      "fontes": [
+        "lib/chatgpt-auth.cjs",
+        "lib/responses.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/core.test.cjs",
+          "tests/responses.test.cjs"
+        ],
+        "limites": "Testes OAuth e de capacidades usam fixtures; testes reais de conta foram separados conforme descrito na linha."
+      }
+    },
+    {
+      "id": "AM08",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Recuperar incompatibilidade de parâmetros do modelo",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Capacidade recusada é informada; reasoning incompatível permite uma repetição com padrão do mesmo modelo, com aviso.",
+      "fontes": [
+        "lib/chatgpt-auth.cjs",
+        "lib/responses.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/core.test.cjs",
+          "tests/responses.test.cjs"
+        ],
+        "limites": "Não troca provedor/modelo silenciosamente nem garante descobrir todas as capacidades. Testes OAuth e de capacidades usam fixtures; testes reais de conta foram separados conforme descrito na linha."
+      }
+    },
+    {
+      "id": "AM09",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Executar LLM local sem instalar Ollama",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Runtime llama.cpp próprio gera respostas sem instalar Ollama.",
+      "fontes": [
+        "lib/local-engine.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Qwen2.5 0.5B gerou resposta real na CPU. Runtime Vulkan presente; geração Vulkan e hardware correspondente não validados."
+      }
+    },
+    {
+      "id": "AM10",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Catálogo local curado por tamanho, memória e visão",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Catálogo leve de texto/visão, tamanhos, estimativas, downloads verificados e importação GGUF/projetor.",
+      "fontes": [
+        "lib/local-engine.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Qwen2.5 0.5B gerou resposta real na CPU. Runtime Vulkan presente; geração Vulkan e hardware correspondente não validados."
+      }
+    },
+    {
+      "id": "AM11",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Aceleração local de LLM e ajuste automático de hardware",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "CPU padrão, inventário de hardware, contexto/threads e Vulkan com recuperação para CPU.",
+      "fontes": [
+        "lib/local-engine.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Sem runtime CUDA; geração Vulkan não foi validada em hardware. Qwen2.5 0.5B gerou resposta real na CPU. Runtime Vulkan presente; geração Vulkan e hardware correspondente não validados."
+      }
+    },
+    {
+      "id": "AM12",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Descarregar modelo local por inatividade",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Modelo próprio descarregado por temporizador de inatividade configurável.",
+      "fontes": [
+        "lib/local-engine.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Qwen2.5 0.5B gerou resposta real na CPU. Runtime Vulkan presente; geração Vulkan e hardware correspondente não validados."
+      }
+    },
+    {
+      "id": "AM13",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Análise de imagem com modelo local",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "Imagens suportadas por modelo de visão Ollama ou llama.cpp com projetor.",
+      "fontes": [
+        "lib/local-engine.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Inferência visual com imagem real depende do modelo/hardware e não foi comprovada nesta entrega. Qwen2.5 0.5B gerou resposta real na CPU. Runtime Vulkan presente; geração Vulkan e hardware correspondente não validados."
+      }
+    },
+    {
+      "id": "AM14",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Transcrição local básica sem nuvem",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "Whisper persistente processa áudio local sem serviço STT de nuvem.",
+      "fontes": [
+        "lib/whisper.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs",
+          "scripts/native-smoke.cjs"
+        ],
+        "limites": "Base CPU transcreveu amostra pública JFK e reutilizou o processo. Os sete modelos não foram todos carregados; runtime STT GPU não foi distribuído."
+      }
+    },
+    {
+      "id": "AM15",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Catálogo e gestão completa de modelos Whisper",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Sete modelos com tamanho/RAM, download SHA-256, seleção e inventário básico.",
+      "fontes": [
+        "lib/whisper.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs",
+          "scripts/native-smoke.cjs"
+        ],
+        "limites": "Não equivale a gestão completa de exclusão/reverificação de qualquer arquivo arbitrário. Base CPU transcreveu amostra pública JFK e reutilizou o processo. Os sete modelos não foram todos carregados; runtime STT GPU não foi distribuído."
+      }
+    },
+    {
+      "id": "AM16",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Detecção de fala e transcrição parcial local contínua",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "VAD, silêncio e identidade de segmento por origem, com parciais e final refinado.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "AM17",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Modelo Whisper persistente e refinamento final da fala",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Whisper Server conserva o modelo e refina segmentos finais.",
+      "fontes": [
+        "lib/whisper.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs",
+          "scripts/native-smoke.cjs"
+        ],
+        "limites": "Base CPU transcreveu amostra pública JFK e reutilizou o processo. Os sete modelos não foram todos carregados; runtime STT GPU não foi distribuído."
+      }
+    },
+    {
+      "id": "AM18",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Whisper: selecionar GPU/CPU e recuperar falhas",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Transcrição CPU fixa com cancelamento/reinicialização de processo.",
+      "fontes": [
+        "lib/whisper.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs",
+          "scripts/native-smoke.cjs"
+        ],
+        "limites": "Seleção GPU/dispositivo e recuperação GPU→CPU de STT não são oferecidas por este runtime. Base CPU transcreveu amostra pública JFK e reutilizou o processo. Os sete modelos não foram todos carregados; runtime STT GPU não foi distribuído."
+      }
+    },
+    {
+      "id": "AM19",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Whisper: idioma automático e troca em sessão",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Idioma fixo/automático aplicado aos próximos segmentos da sessão.",
+      "fontes": [
+        "lib/whisper.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs",
+          "scripts/native-smoke.cjs"
+        ],
+        "limites": "Base CPU transcreveu amostra pública JFK e reutilizou o processo. Os sete modelos não foram todos carregados; runtime STT GPU não foi distribuído."
+      }
+    },
+    {
+      "id": "AM20",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Whisper: contexto e vocabulário inicial da transcrição",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Vocabulário/prompt de apoio enviado na inferência Whisper.",
+      "fontes": [
+        "lib/whisper.cjs",
+        "lib/model-catalog.cjs",
+        "lib/verified-download.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs",
+          "scripts/native-smoke.cjs"
+        ],
+        "limites": "Base CPU transcreveu amostra pública JFK e reutilizou o processo. Os sete modelos não foram todos carregados; runtime STT GPU não foi distribuído."
+      }
+    },
+    {
+      "id": "AM21",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Microfone: seleção e iniciar/pausar captura",
+      "estado_anterior": "presente",
+      "estado": "adaptado",
+      "entrega": "Selecionar, iniciar e pausar microfone; Chromium substitui auxiliar bloqueado.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "AM22",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Diagnóstico de permissões do microfone no Windows",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Configuração guiada e diagnóstico de permissão/indisponibilidade/bloqueio Windows.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Não altera política do sistema nem identifica garantidamente todas as causas. Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "AM23",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Capturar áudio do sistema no Windows",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "WASAPI com saída selecionável quando permitido; compartilhamento de áudio Chromium como alternativa.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Seleção de saída nativa e loopback físico não foram validados neste Windows. Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "AM24",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Reconectar após mudança/perda de saída de áudio",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Recuperação nativa de dispositivo e diagnóstico de perda de trilha Chromium.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "No fallback Chromium a perda encerra a captura e pede reinício. Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "AM25",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Transcrição separada de você e do outro lado",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Fluxos separados de microfone/sistema, identificados como Você/Outro lado.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "É atribuição por origem, não diarização de várias pessoas na mesma fonte. Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "AM26",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Capturar somente o sistema e silenciar mic independentemente",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Fontes independentes com silenciamento e modo somente sistema.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "AM27",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Medição real e separada dos níveis de áudio",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Medidores RMS reais por origem, separados.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "AM28",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Cancelamento imediato do processamento de áudio em andamento",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "AbortController, parada/cancelamento e descarte de resultados antigos por perfil/captura.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "AM30",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Conversa bidirecional por voz no Memory Assistant",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Conversa em turnos: microfone → chat/memória → leitura local → retomada correlacionada.",
+      "fontes": [
+        "lib/session-service.cjs",
+        "lib/audio-service.cjs",
+        "lib/windows-speech.cjs",
+        "renderer/audio.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/session-service.test.cjs",
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Não é voz cloud full-duplex; reprodução audível e captura física permanecem pendentes. System.Speech sintetizou WAV e cancelou processo; reprodução audível e conversa com dispositivos físicos não foram validadas."
+      }
+    },
+    {
+      "id": "AM31",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Gemini para geração de respostas e resumos",
+      "estado_anterior": "ausente",
+      "estado": "fora do escopo",
+      "entrega": "Gemini excluído: geração usa conta ChatGPT ou modelos locais.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "AM32",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "OpenRouter para geração de respostas e resumos",
+      "estado_anterior": "ausente",
+      "estado": "fora do escopo",
+      "entrega": "OpenRouter excluído: geração usa conta ChatGPT ou modelos locais.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "AM33",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Transcrição OpenAI ao vivo pela nuvem",
+      "estado_anterior": "ausente",
+      "estado": "fora do escopo",
+      "entrega": "STT OpenAI em nuvem excluído; transcrição usa Whisper local.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "AM34",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Transcrição Gemini ao vivo pela nuvem",
+      "estado_anterior": "ausente",
+      "estado": "fora do escopo",
+      "entrega": "STT Gemini em nuvem excluído; transcrição usa Whisper local.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "AM35",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Transcrição OpenRouter e fallback de engine",
+      "estado_anterior": "ausente",
+      "estado": "fora do escopo",
+      "entrega": "Créditos/transcrição gerenciada cloud excluídos; não há troca para provedor externo.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "AM36",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Tradução de falas em tempo real",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Tradução por trecho, idioma-alvo, original/tradução e repetição após erro.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "AM37",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Modelos e credenciais independentes por operação",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Modelo ChatGPT/local por conversa, resumo, tradução e insights; Whisper/voz locais separados.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Credenciais de outros provedores cloud não são incluídas. Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "AM38",
+      "categoria": "Áudio, voz e modelos",
+      "funcionalidade": "Parâmetros de geração e políticas por operação",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Raciocínio ChatGPT e parâmetros locais específicos do caminho de geração.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Conjuntos variam entre Ollama/compatível/llama.cpp; não promete toda amostragem em todo provedor. Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI01",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Criar, editar, excluir e iniciar assistentes",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "Criar, editar, excluir e iniciar sessão com assistente.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "electron/application.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs"
+        ],
+        "limites": "PDF depende de texto extraível; conteúdo do modelo e a preferência de fundamento não garantem acerto factual."
+      }
+    },
+    {
+      "id": "UI02",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Biblioteca de assistentes fornecida e atualizada pelo produto",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Presets locais, importação e assistentes pessoais substituem catálogo de serviço privado.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "electron/application.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs"
+        ],
+        "limites": "Não há catálogo comercial remoto atualizado pelo serviço de outro produto. PDF depende de texto extraível; conteúdo do modelo e a preferência de fundamento não garantem acerto factual."
+      }
+    },
+    {
+      "id": "UI03",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Salvar e recuperar assistentes e overrides pela conta na nuvem",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Pasta escolhida sincroniza assistentes/preferências com revisões e conflitos.",
+      "fontes": [
+        "lib/assistant-sync.cjs",
+        "lib/integration-service.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Sem Firestore ou conta própria do produto. Conflitos/mescla em pasta local passaram. Convergência entre dois clientes cloud reais não foi exercitada. Histórico/tokens não são sincronizados."
+      }
+    },
+    {
+      "id": "UI04",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Busca e filtragem da biblioteca por categoria",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Busca e filtro de categoria na biblioteca.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "electron/application.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs"
+        ],
+        "limites": "PDF depende de texto extraível; conteúdo do modelo e a preferência de fundamento não garantem acerto factual."
+      }
+    },
+    {
+      "id": "UI05",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Duplicar assistentes",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Duplicação cria assistente independente.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "electron/application.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs"
+        ],
+        "limites": "PDF depende de texto extraível; conteúdo do modelo e a preferência de fundamento não garantem acerto factual."
+      }
+    },
+    {
+      "id": "UI06",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Compartilhar e importar configuração de prompts de assistentes",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Exportação/importação versionada lume.assistant, com revisão.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "electron/application.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs"
+        ],
+        "limites": "PDF depende de texto extraível; conteúdo do modelo e a preferência de fundamento não garantem acerto factual."
+      }
+    },
+    {
+      "id": "UI07",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Prompts separados por tarefa do assistente",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Prompts separados de conversa, insights, próximas perguntas, resumo e ferramentas.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "electron/application.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs"
+        ],
+        "limites": "PDF depende de texto extraível; conteúdo do modelo e a preferência de fundamento não garantem acerto factual."
+      }
+    },
+    {
+      "id": "UI08",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Arquivos persistentes na base de conhecimento de cada assistente",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Arquivos permanentes textuais e extração local de texto de PDF.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "electron/application.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs"
+        ],
+        "limites": "PDF depende de texto extraível; conteúdo do modelo e a preferência de fundamento não garantem acerto factual."
+      }
+    },
+    {
+      "id": "UI09",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Opção de instruir o assistente a responder somente quando estiver seguro",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Preferência requireCertainty orienta responder apenas com fundamento.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "electron/application.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs"
+        ],
+        "limites": "É instrução de prompt, sem garantia de acerto. PDF depende de texto extraível; conteúdo do modelo e a preferência de fundamento não garantem acerto factual."
+      }
+    },
+    {
+      "id": "UI10",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Assistant Builder por conversa, com ferramentas para criar e editar biblioteca",
+      "estado_anterior": "não verificado",
+      "estado": "fora do escopo",
+      "entrega": "Construtor inteiramente por conversa não era capacidade original comprovadamente ativa; formulário e proposta MCP permanecem.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "UI11",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Histórico local com mensagens e transcrições persistentes",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "SQLite persistente, migração com JSON preservado e backup.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/chatgpt-auth.cjs",
+        "lib/session-service.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "IPC/SQLite reais com dados isolados; alternância automatizada entre contas usa identidades sintéticas."
+      }
+    },
+    {
+      "id": "UI12",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Encerrar e retomar formalmente uma sessão",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Encerrar/retomar formalmente, duração e resumo opcional.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "real"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI13",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Metadados de duração, modelo e origem por sessão",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Datas, duração, origem e perfil; modelsUsed registra provedor/modelo/papel após geração concluída.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI14",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Resumo estruturado e título produzidos e persistidos no encerramento",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Resumo estruturado persistente com assunto/título e geração no encerramento.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "real"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI15",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Resumo vivo da sessão atualizado durante a conversa",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Resumo vivo enfileirado após novos trechos, respeitando intervalo mínimo.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Não promete delta estritamente incremental ou atualização sem novos trechos. Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI16",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Editor de resumo com Markdown, prévia e salvamento",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Editor Markdown, prévia e salvamento do resumo.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI17",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Reescrever resumo com IA a partir de instrução e transcrição",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Reescrita usa resumo anterior, instrução e material da sessão.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI18",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Copiar separadamente resumo, conversa e transcrição",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Cópia separada de resumo, conversa e transcrição.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI19",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Memory Assistant: pesquisar, ler e retomar sessões antigas com IA",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Memória pesquisa/lê sessões do perfil, apresenta referências e permite retomada.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "real"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "memory_search_sessions executada em conta real, comprovada por evento; recuperação e isolamento também testados por fixtures. Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI20",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Busca no histórico com resumo, snippets e paginação",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Busca paginada por conteúdo com snippets e resumo.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/chatgpt-auth.cjs",
+        "lib/session-service.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "IPC/SQLite reais com dados isolados; alternância automatizada entre contas usa identidades sintéticas."
+      }
+    },
+    {
+      "id": "UI21",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Separação do histórico por conta",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Histórico separado por perfil; legado exige atribuição explícita.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/chatgpt-auth.cjs",
+        "lib/session-service.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "IPC/SQLite reais com dados isolados; alternância automatizada entre contas usa identidades sintéticas."
+      }
+    },
+    {
+      "id": "UI22",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Limpar todo o histórico pela interface",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Limpeza do histórico do perfil com confirmação.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/chatgpt-auth.cjs",
+        "lib/session-service.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "IPC/SQLite reais com dados isolados; alternância automatizada entre contas usa identidades sintéticas."
+      }
+    },
+    {
+      "id": "UI23",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Painel de estatísticas de sessões e mensagens",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Estatísticas de sessões, mensagens, transcrições e sessões ativas.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/chatgpt-auth.cjs",
+        "lib/session-service.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "IPC/SQLite reais com dados isolados; alternância automatizada entre contas usa identidades sintéticas."
+      }
+    },
+    {
+      "id": "UI24",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Sugestões de próximas perguntas geradas a partir da resposta",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Perguntas seguintes dinâmicas preenchem o rascunho sem enviar automaticamente.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI25",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Compactação de contexto em conversas longas, com desfazer/indicador",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Compactação com resumo/cutoff, indicador e desfazer; originais preservados.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI26",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Enviar resumo e memória por e-mail",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Prepara rascunho mailto ou .eml para revisar/enviar no cliente de e-mail.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Não envia por serviço próprio nem confirma entrega. Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI27",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Exportação local da sessão para Markdown",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "Exportação Markdown da sessão local.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI28",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Sincronizar sessões na nuvem entre dispositivos",
+      "estado_anterior": "não verificado",
+      "estado": "fora do escopo",
+      "entrega": "Sessões não são sincronizadas; a capacidade original não era falta comprovada e foi excluída do plano.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "UI29",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Primeira configuração guiada, permissões e teste de áudio",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Primeira configuração guiada para conta/modelo, áudio e preferências.",
+      "fontes": [
+        "lib/audio-service.cjs",
+        "renderer/audio.js",
+        "native/Lume.Audio/Program.cs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/audio-service.test.cjs"
+        ],
+        "limites": "Áudio físico e cobertura de todos os cenários de permissão permanecem pendentes. Auxiliar nativo bloqueado pelo Controle de Aplicativo. Fallback Chromium passou com arquivo de fala; microfone/loopback físicos pendentes."
+      }
+    },
+    {
+      "id": "UI30",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Idioma selecionável para toda a interface",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Seletor e textos de interface em português, inglês e espanhol.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "electron/application.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs"
+        ],
+        "limites": "Mensagens de sistema/erros de servidor/modelo podem manter o idioma de origem. PDF depende de texto extraível; conteúdo do modelo e a preferência de fundamento não garantem acerto factual."
+      }
+    },
+    {
+      "id": "UI31",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Conta própria do produto com Google/e-mail e recuperação de senha",
+      "estado_anterior": "ausente",
+      "estado": "fora do escopo",
+      "entrega": "Conta própria Google/e-mail/senha do produto excluída; usa perfis ChatGPT/locais.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "UI32",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Planos pagos, trial, checkout e gestão de assinatura do próprio produto",
+      "estado_anterior": "ausente",
+      "estado": "fora do escopo",
+      "entrega": "Cobrança, trial e assinatura própria não fazem parte do aplicativo pessoal.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "UI33",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Indicações com código, resgates e estatísticas",
+      "estado_anterior": "ausente",
+      "estado": "fora do escopo",
+      "entrega": "Indicações, resgates e créditos comerciais excluídos.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "UI34",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Cinco modos e ajustes de proatividade dos insights",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Cinco modos, intervalos/gatilhos configuráveis e histórico de insights.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI35",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Disparar insight por pergunta detectada, convite, silêncio e contexto de tela",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Pergunta, período, silêncio e tela opt-in disparam insights; tela automática inicia desligada com aviso.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "São heurísticas; contexto de tela em uso físico prolongado não foi medido. Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI36",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Instrução própria de teleprompter, continuidade e evitar repetição",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Teleprompter em primeira pessoa considera contexto, último insight e possibilidade de silêncio.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI37",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Renomear, excluir e reabrir uma conversa salva",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "Renomear, excluir e reabrir conversas.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "UI38",
+      "categoria": "Sessões, assistentes e interface",
+      "funcionalidade": "Chat com respostas em streaming, interrupção e cópia de mensagem",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "Chat em streaming, interrupção, fontes e cópia de mensagem.",
+      "fontes": [
+        "lib/sqlite-store.cjs",
+        "lib/session-service.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "real"
+        ],
+        "evidencias": [
+          "tests/store-v2.test.cjs",
+          "tests/session-service.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Geração em testes de sessão usa respostas simuladas; resumo/encerramento e memória também tiveram validação real separada quando indicado."
+      }
+    },
+    {
+      "id": "D01",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Cliente MCP remoto nas conversas",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Cliente MCP stdio/HTTP/SSE descobre/executa ferramentas na conversa, com progresso/origem e revisão de escrita.",
+      "fontes": [
+        "lib/integration-service.cjs",
+        "lib/connectors/mcp.cjs",
+        "lib/connectors/google.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs",
+          "tests/session-service.test.cjs"
+        ],
+        "limites": "SDK MCP real contra fixtures locais. Google usa respostas simuladas; consentimento e ferramentas Google/Notion de contas reais pendentes."
+      }
+    },
+    {
+      "id": "D02",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "OAuth das ferramentas conectadas e Google",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "OAuth MCP com descoberta/PKCE e OAuth Google desktop próprio; segredos por perfil.",
+      "fontes": [
+        "lib/integration-service.cjs",
+        "lib/connectors/mcp.cjs",
+        "lib/connectors/google.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs",
+          "tests/session-service.test.cjs"
+        ],
+        "limites": "SDK MCP real contra fixtures locais. Google usa respostas simuladas; consentimento e ferramentas Google/Notion de contas reais pendentes."
+      }
+    },
+    {
+      "id": "D03",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Detectar e conectar Obsidian Local REST API",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Descobre cofres registrados e conecta pasta ou Local REST configurado pelo usuário.",
+      "fontes": [
+        "lib/integration-service.cjs",
+        "lib/connectors/obsidian.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Não instala nem detecta garantidamente o plugin; Local REST depende de URL/token configurados. Notas de teste e IPC real em pasta isolada; Local REST de um cofre pessoal não foi conectado."
+      }
+    },
+    {
+      "id": "D04",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Pesquisar e consultar notas Obsidian por ferramenta",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Busca/leitura sob demanda por ferramenta com limites de pasta/tamanho.",
+      "fontes": [
+        "lib/integration-service.cjs",
+        "lib/connectors/obsidian.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Notas de teste e IPC real em pasta isolada; Local REST de um cofre pessoal não foi conectado."
+      }
+    },
+    {
+      "id": "D05",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Salvar resumo da sessão diretamente no Obsidian",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Propõe criar/anexar/substituir resumo, com aprovação e revisão/backup no acesso direto.",
+      "fontes": [
+        "lib/integration-service.cjs",
+        "lib/connectors/obsidian.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs"
+        ],
+        "limites": "Notas de teste e IPC real em pasta isolada; Local REST de um cofre pessoal não foi conectado."
+      }
+    },
+    {
+      "id": "D06",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Instalar/remover integração em clientes de agentes",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Instala/remove Lume em Codex, Cursor, Claude Desktop/Code e JSON compatível escolhido.",
+      "fontes": [
+        "lib/integration-service.cjs",
+        "lib/connectors/mcp.cjs",
+        "lib/connectors/google.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs",
+          "tests/session-service.test.cjs"
+        ],
+        "limites": "Grok usa arquivo escolhido, sem presumir path/formato; testes alteraram apenas configurações fictícias. SDK MCP real contra fixtures locais. Google usa respostas simuladas; consentimento e ferramentas Google/Notion de contas reais pendentes."
+      }
+    },
+    {
+      "id": "D07",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Handoff externo básico: assistente, prompt, contexto, objetivo e proposta",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "MCP/deep link preparam sessão/proposta para revisão sem autoenvio.",
+      "fontes": [
+        "lib/handoff.cjs",
+        "integrations/mcp-server.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/core.test.cjs",
+          "tests/integrations.test.cjs"
+        ],
+        "limites": "Formato próprio com revisão e sem autoenvio; testes não alteraram clientes pessoais."
+      }
+    },
+    {
+      "id": "D08",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Handoff com arquivos e prompts especializados de assistente",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Handoff v2 com arquivos textuais e modos/prompts especializados, preservando v1.",
+      "fontes": [
+        "lib/handoff.cjs",
+        "integrations/mcp-server.cjs",
+        "renderer/app.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado"
+        ],
+        "evidencias": [
+          "tests/core.test.cjs",
+          "tests/integrations.test.cjs"
+        ],
+        "limites": "Formato próprio, sem reprodução integral de campos privados de outro produto. Formato próprio com revisão e sem autoenvio; testes não alteraram clientes pessoais."
+      }
+    },
+    {
+      "id": "D09",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Captura de tela/janela como contexto",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "Captura explícita de tela/janela como contexto visual.",
+      "fontes": [
+        "electron/screen-worker.cjs",
+        "electron/desktop-service.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Fila lógica no processo principal. Captura física e falha nativa desse processo não são comprovadas pelos mocks."
+      }
+    },
+    {
+      "id": "D10",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Captura Windows com worker, serialização e recuperação",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Fila serial com timeout, invalidação e recuperação lógica no processo principal.",
+      "fontes": [
+        "electron/screen-worker.cjs",
+        "electron/desktop-service.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Sem worker_threads/processo nativo isolado; travamento do processo principal pode exigir reabrir o app. Fila lógica no processo principal. Captura física e falha nativa desse processo não são comprovadas pelos mocks."
+      }
+    },
+    {
+      "id": "D11",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Janela flutuante de chat",
+      "estado_anterior": "presente",
+      "estado": "implementado",
+      "entrega": "Chat flutuante com sessão/anexos e retorno à principal.",
+      "fontes": [
+        "electron/desktop-service.cjs",
+        "renderer/notch.js",
+        "renderer/overlay.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Lógica com fixtures; múltiplos monitores físicos, DPI, suspensão/desbloqueio e efeitos de captura por outros programas pendentes."
+      }
+    },
+    {
+      "id": "D12",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Notch e ActionBar com recolher, fixar, navegação e click-through",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Notch/ações com recolher, fixar, histórico, redimensionamento e passagem de cliques.",
+      "fontes": [
+        "electron/desktop-service.cjs",
+        "renderer/notch.js",
+        "renderer/overlay.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Superfícies Electron/Win32; cliques/shape entre aplicativos ainda exigem verificação manual. Lógica com fixtures; múltiplos monitores físicos, DPI, suspensão/desbloqueio e efeitos de captura por outros programas pendentes."
+      }
+    },
+    {
+      "id": "D13",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Atalhos globais configuráveis e ações avançadas",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Cinco atalhos globais remapeáveis, suspensão durante edição e diagnóstico de conflitos.",
+      "fontes": [
+        "electron/desktop-service.cjs",
+        "renderer/notch.js",
+        "renderer/overlay.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Opacidade/topo também têm controles na interface; não reproduz todo atalho do outro produto. Lógica com fixtures; múltiplos monitores físicos, DPI, suspensão/desbloqueio e efeitos de captura por outros programas pendentes."
+      }
+    },
+    {
+      "id": "D14",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Ler/analisar área de transferência com atalho",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Análise explícita da área de transferência por ação/atalho.",
+      "fontes": [
+        "electron/desktop-service.cjs",
+        "renderer/notch.js",
+        "renderer/overlay.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Sem monitor contínuo do clipboard, que não foi incluído no plano. Lógica com fixtures; múltiplos monitores físicos, DPI, suspensão/desbloqueio e efeitos de captura por outros programas pendentes."
+      }
+    },
+    {
+      "id": "D15",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Mover overlay/Notch entre monitores e recompor ao alterar displays/DPI",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Lista monitores, move janelas e recompõe limites em mudanças de display/escala.",
+      "fontes": [
+        "electron/desktop-service.cjs",
+        "renderer/notch.js",
+        "renderer/overlay.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Lógica com fixtures; múltiplos monitores físicos, DPI, suspensão/desbloqueio e efeitos de captura por outros programas pendentes."
+      }
+    },
+    {
+      "id": "D16",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Modo discreto com proteção de captura e visibilidade da barra de tarefas",
+      "estado_anterior": "parcial",
+      "estado": "adaptado",
+      "entrega": "Opacidade, proteção de captura e visibilidade da barra de tarefas por janela.",
+      "fontes": [
+        "electron/desktop-service.cjs",
+        "renderer/notch.js",
+        "renderer/overlay.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Proteção é solicitação ao sistema, sem garantia contra todo software de captura. Lógica com fixtures; múltiplos monitores físicos, DPI, suspensão/desbloqueio e efeitos de captura por outros programas pendentes."
+      }
+    },
+    {
+      "id": "D17",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Bandeja do sistema e ações rápidas",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Bandeja com abertura, nova sessão, flutuante, Notch, configurações e saída.",
+      "fontes": [
+        "electron/desktop-service.cjs",
+        "renderer/notch.js",
+        "renderer/overlay.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Lógica com fixtures; múltiplos monitores físicos, DPI, suspensão/desbloqueio e efeitos de captura por outros programas pendentes."
+      }
+    },
+    {
+      "id": "D18",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Atualizador integrado com verificação e instalação segura",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Manifesto Ed25519, origem/tamanho/SHA-256, revisão, bloqueio durante sessão e backup.",
+      "fontes": [
+        "lib/updater.cjs",
+        "scripts/release-manifest.cjs",
+        ".github/workflows/release.yml",
+        "package.json"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/updater.test.cjs",
+          "tests/electron-packaged-staging-smoke.cjs"
+        ],
+        "limites": "Sem certificado Authenticode do editor; assinatura do manifesto é outra cadeia de confiança. Staging empacotado abriu; teste do pacote final/instalação NSIS/upgrade físico são verificações separadas. Manifesto assinado não é Authenticode."
+      }
+    },
+    {
+      "id": "D19",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Recuperar renderer e overlay após falha/retomada do Windows",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "Recuperação limitada de renderer e recomposição de janelas/atalhos em retomada/monitor.",
+      "fontes": [
+        "electron/desktop-service.cjs",
+        "renderer/notch.js",
+        "renderer/overlay.js"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/desktop.test.cjs"
+        ],
+        "limites": "Lógica com fixtures; múltiplos monitores físicos, DPI, suspensão/desbloqueio e efeitos de captura por outros programas pendentes."
+      }
+    },
+    {
+      "id": "D20",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Instalador Windows e manutenção da instalação",
+      "estado_anterior": "parcial",
+      "estado": "implementado",
+      "entrega": "NSIS com desinstalação e portátil, mantendo a pasta de dados.",
+      "fontes": [
+        "lib/updater.cjs",
+        "scripts/release-manifest.cjs",
+        ".github/workflows/release.yml",
+        "package.json"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/updater.test.cjs",
+          "tests/electron-packaged-staging-smoke.cjs"
+        ],
+        "limites": "Staging empacotado abriu; teste do pacote final/instalação NSIS/upgrade físico são verificações separadas. Manifesto assinado não é Authenticode."
+      }
+    },
+    {
+      "id": "D21",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Iniciar automaticamente com Windows",
+      "estado_anterior": "não verificado",
+      "estado": "fora do escopo",
+      "entrega": "Iniciar com Windows não foi falta original comprovada e não foi acrescentado.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "D22",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Seleção de texto por acessibilidade nativa",
+      "estado_anterior": "não aplicável no Windows",
+      "estado": "fora do escopo",
+      "entrega": "Seleção por acessibilidade macOS não se aplica ao escopo Windows.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "D23",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "OCR local com Tesseract",
+      "estado_anterior": "não aplicável no Windows",
+      "estado": "fora do escopo",
+      "entrega": "OCR nativo não era gap Windows comprovado; PDF textual e modelos de visão são caminhos distintos.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "D24",
+      "categoria": "Desktop e integrações",
+      "funcionalidade": "Recursos específicos macOS/Linux",
+      "estado_anterior": "não aplicável no Windows",
+      "estado": "fora do escopo",
+      "entrega": "Apple Speech/HAL, workspaces macOS e Wayland não entram nesta distribuição.",
+      "fontes": [],
+      "verificacao": {
+        "tipos": [],
+        "evidencias": [],
+        "limites": "Não se aplica à obrigação deste plano: exclusão, plataforma diferente ou capacidade original não comprovada."
+      }
+    },
+    {
+      "id": "C01",
+      "categoria": "Contexto conectado e pesquisa",
+      "funcionalidade": "Buscar e ler contexto de Calendar, Drive, Docs, Sheets e Notion",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Calendar/Drive/Docs/Sheets em leitura com OAuth próprio e Notion MCP oficial.",
+      "fontes": [
+        "lib/integration-service.cjs",
+        "lib/connectors/mcp.cjs",
+        "lib/connectors/google.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs",
+          "tests/session-service.test.cjs"
+        ],
+        "limites": "SDK MCP real contra fixtures locais. Google usa respostas simuladas; consentimento e ferramentas Google/Notion de contas reais pendentes."
+      }
+    },
+    {
+      "id": "C02",
+      "categoria": "Contexto conectado e pesquisa",
+      "funcionalidade": "Selecionar fontes e ferramentas para cada pedido",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Seleção de conexões, documentos e ferramentas do pedido, com allowlist por geração.",
+      "fontes": [
+        "lib/integration-service.cjs",
+        "lib/connectors/mcp.cjs",
+        "lib/connectors/google.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs",
+          "tests/session-service.test.cjs"
+        ],
+        "limites": "SDK MCP real contra fixtures locais. Google usa respostas simuladas; consentimento e ferramentas Google/Notion de contas reais pendentes."
+      }
+    },
+    {
+      "id": "C03",
+      "categoria": "Contexto conectado e pesquisa",
+      "funcionalidade": "Reutilizar documentos remotos recentes como contexto",
+      "estado_anterior": "ausente",
+      "estado": "implementado",
+      "entrega": "Referências recentes por perfil e releitura quando o conector/recurso permite.",
+      "fontes": [
+        "lib/integration-service.cjs",
+        "lib/connectors/mcp.cjs",
+        "lib/connectors/google.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "real",
+          "unitário",
+          "simulado",
+          "pendente"
+        ],
+        "evidencias": [
+          "tests/integrations.test.cjs",
+          "tests/electron-integration-smoke.cjs",
+          "tests/session-service.test.cjs"
+        ],
+        "limites": "SDK MCP real contra fixtures locais. Google usa respostas simuladas; consentimento e ferramentas Google/Notion de contas reais pendentes."
+      }
+    },
+    {
+      "id": "C04",
+      "categoria": "Contexto conectado e pesquisa",
+      "funcionalidade": "Pesquisa na internet com fontes e citações",
+      "estado_anterior": "ausente",
+      "estado": "adaptado",
+      "entrega": "Pesquisa web ChatGPT com fontes/citações quando conta/modelo permite; modo local informa indisponibilidade.",
+      "fontes": [
+        "lib/chatgpt-auth.cjs",
+        "lib/responses.cjs"
+      ],
+      "verificacao": {
+        "tipos": [
+          "unitário",
+          "simulado",
+          "real"
+        ],
+        "evidencias": [
+          "tests/core.test.cjs",
+          "tests/responses.test.cjs"
+        ],
+        "limites": "Pesquisa web exercitada na conta real com uma citação oficial clicável; outras contas/modelos podem não oferecer a capacidade. Testes OAuth e de capacidades usam fixtures; testes reais de conta foram separados conforme descrito na linha."
+      }
+    }
+  ]
+}

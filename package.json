@@ -1,0 +1,114 @@
+{
+  "name": "lume-desktop",
+  "productName": "Lume",
+  "version": "0.2.0",
+  "description": "Assistente desktop pessoal com conta ChatGPT, contexto de tela e transcrição local.",
+  "author": "Lume contributors",
+  "license": "MIT",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "check": "node scripts/build-ipc-contract.cjs && node scripts/check.cjs",
+    "build": "electron-builder --win nsis portable --x64 --publish never",
+    "prepareNative": "node scripts/setup-whisper.cjs && node scripts/setup-model.cjs && node scripts/setup-audio-helper.cjs && node scripts/setup-llama.cjs",
+    "test:native": "node scripts/native-smoke.cjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.3.1",
+    "dompurify": "3.4.17",
+    "extract-zip": "2.0.1",
+    "jose": "6.2.12",
+    "marked": "18.1.1",
+    "pdfjs-dist": "6.4.299",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "electron": "44.9.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "local.lume.desktop",
+    "asar": true,
+    "directories": {
+      "output": "../../outputs/lume-0.2.0-build"
+    },
+    "files": [
+      "electron/**",
+      "lib/**",
+      "renderer/**",
+      "integrations/**",
+      "README.md",
+      "LICENSE",
+      "package.json",
+      "THIRD-PARTY-NOTICES.md",
+      "release-public-key.pem",
+      "docs/**"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "signExecutable": false,
+      "icon": "renderer/lume.ico"
+    },
+    "artifactName": "Lume-${version}-Windows-x64.${ext}",
+    "extraResources": [
+      {
+        "from": "vendor/whisper",
+        "to": "whisper",
+        "filter": [
+          "*.dll",
+          "whisper-cli.exe",
+          "LICENSE*",
+          "SOURCE*",
+          "whisper-server.exe"
+        ]
+      },
+      {
+        "from": "integrations",
+        "to": "integrations"
+      },
+      {
+        "from": "vendor/models",
+        "to": "models"
+      },
+      {
+        "from": "vendor/audio-helper",
+        "to": "audio-helper",
+        "filter": [
+          "Lume.Audio.exe",
+          "*.txt",
+          "NOTICE.md"
+        ]
+      },
+      {
+        "from": "vendor/llama",
+        "to": "llama",
+        "filter": [
+          "**/*.exe",
+          "**/*.dll",
+          "**/LICENSE*",
+          "**/SOURCE*"
+        ]
+      }
+    ],
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "Lume-${version}-Setup-x64.exe"
+    },
+    "portable": {
+      "artifactName": "Lume-${version}-Portable-x64.exe"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deusbr/lume.git"
+  },
+  "homepage": "https://github.com/deusbr/lume"
+}

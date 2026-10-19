@@ -1,0 +1,1 @@
+Lume.Audio is original Lume source (MIT). It uses NAudio 2.2.1 (MIT), System.Speech 8.0.0 and the .NET 8 runtime (MIT). Sources: https://github.com/naudio/NAudio ; https://github.com/dotnet/runtime ; https://github.com/dotnet/dotnet . The self-contained distribution includes these runtime components. No Perssua binaries or source are used.

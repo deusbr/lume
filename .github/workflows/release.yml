@@ -1,0 +1,54 @@
+name: Lume Windows release
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - name: Confirm version matches tag
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $releaseVersion = node -p "require('./package.json').version"
+          if ($env:GITHUB_REF_NAME -ne "v$releaseVersion") { throw 'Tag and package version differ.' }
+      - run: node scripts/setup-whisper.cjs
+      - run: node scripts/setup-model.cjs
+      - run: node scripts/setup-audio-helper.cjs
+      - run: node scripts/setup-llama.cjs
+      - name: Build installers
+        run: npx electron-builder --win nsis portable --x64 --publish never --config.directories.output=dist
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Sign update manifest
+        run: node scripts/release-manifest.cjs --directory dist
+        env:
+          RELEASE_SIGNING_KEY: ${{ secrets.RELEASE_SIGNING_KEY }}
+          RELEASE_SIGNING_PASSPHRASE: ${{ secrets.RELEASE_SIGNING_PASSPHRASE }}
+      - name: Upload reviewable build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lume-Windows-x64
+          path: |
+            dist/*.exe
+            dist/lume-update.json
+          if-no-files-found: error
+      - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: gh release create "$env:GITHUB_REF_NAME" dist/*.exe dist/lume-update.json --repo deusbr/lume --verify-tag --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
