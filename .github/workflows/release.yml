@@ -30,7 +30,7 @@ jobs:
       - run: node scripts/setup-audio-helper.cjs
       - run: node scripts/setup-llama.cjs
       - name: Build installers
-        run: npx electron-builder --win nsis portable --x64 --publish never --config.directories.output=dist
+        run: npx electron-builder --win nsis portable zip --x64 --publish never --config.directories.output=dist
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
       - name: Sign update manifest
@@ -44,11 +44,14 @@ jobs:
           name: Lume-Windows-x64
           path: |
             dist/*.exe
+            dist/*.zip
             dist/lume-update.json
           if-no-files-found: error
       - name: Publish GitHub release
         if: startsWith(github.ref, 'refs/tags/')
         shell: pwsh
-        run: gh release create "$env:GITHUB_REF_NAME" dist/*.exe dist/lume-update.json --repo deusbr/lume --verify-tag --generate-notes
+        run: |
+          $releaseFiles = @(Get-ChildItem -Path 'dist/*.exe','dist/*.zip','dist/lume-update.json' -File | ForEach-Object { $_.FullName })
+          gh release create "$env:GITHUB_REF_NAME" @releaseFiles --repo deusbr/lume --verify-tag --generate-notes
         env:
           GH_TOKEN: ${{ github.token }}

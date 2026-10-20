@@ -76,3 +76,5 @@ Google e Notion exigem configuração/consentimento e validação com suas conta
 Recursos comerciais, provedores cloud com chave própria, serviços privados de terceiros, automações não comprovadas e funções exclusivas de macOS/Linux estão fora desta versão para uso pessoal.
 
 Código próprio sob MIT; runtimes, modelos e dependências mantêm suas licenças. Consulte `THIRD-PARTY-NOTICES.md` e os avisos que acompanham os arquivos nativos.
+
+O ZIP `Lume-0.2.0-Windows-x64.zip` contém a pasta completa para execução manual. O runtime oficial é mantido sem edição de bytes. Setup/portátil não possuem certificado Authenticode e podem ser bloqueados por uma política que exija editor confiável; consulte [distribuição e restrições](docs/release.md).

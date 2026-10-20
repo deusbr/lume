@@ -41,3 +41,10 @@ O aplicativo não executa downloads por iniciativa própria. `updates.check` con
 ## Limite da captura
 
 `ScreenCaptureWorker` é uma fila de trabalho serial com prazo, invalidação de resultados antigos e recuperação após mudanças de tela/suspensão. A API `desktopCapturer` do Electron só funciona no processo principal; não é um `worker_threads` nativo. Capturas simultâneas são limitadas e pedidos atrasados têm seus resultados descartados. Um travamento nativo do processo principal exige reabrir o aplicativo; o serviço não promete isolamento de processo que a implementação não oferece.
+
+
+### Runtime oficial e restrições do Windows
+
+O empacotamento mantém o executável oficial do Electron sem editar seus bytes (`asar: false`, `signAndEditExecutable: false`). O código próprio e as dependências ficam em `resources/app`; a identidade Lume aparece nas janelas e no instalador. Os metadados/ícone do arquivo de runtime podem continuar identificando Electron. Isso não adiciona assinatura Authenticode.
+
+O Setup e o portátil NSIS continuam sem certificado de editor e podem ser bloqueados pelo Controle de Aplicativo. Também é produzida uma pasta compactada `Lume-0.2.0-Windows-x64.zip` para extração completa e abertura de `Lume.exe`. Nenhuma política do Windows é alterada. Se a política exigir um editor assinado, será necessário um certificado confiável e configuração de assinatura para a distribuição. O manifesto Ed25519 do atualizador cobre os dois instaladores EXE, não o ZIP manual.
