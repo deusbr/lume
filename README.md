@@ -2,11 +2,12 @@
 
 [English](#lume-desktop-020--open-source-local-ai--model-context-protocol-mcp-desktop-assistant) | [Português (BR)](#lume-desktop-020)
 
-**Lume Desktop** is an MIT-licensed, privacy-first Windows x64 AI desktop assistant built with **Electron** and **Node.js 24**. It combines native **Model Context Protocol (`@modelcontextprotocol/client` v2.3.1)** tool integrations with local **llama.cpp** (CPU/Vulkan GGUF) inference, persistent CPU **Whisper** transcription, per-profile **SQLite** memory, and cryptographically verified updates — designed to run smoothly on standard Windows machines even without dedicated GPUs.
+**Lume Desktop** is an MIT-licensed, privacy-first Windows x64 AI desktop assistant built with **Electron** and **Node.js 24**. It implements **bidirectional Model Context Protocol (MCP)** interoperability — serving 7 human-in-the-loop tools directly to **Claude Desktop** and **Claude Code** while connecting assistants to external MCP servers (`@modelcontextprotocol/client` v2.3.1), local **llama.cpp** (CPU/Vulkan GGUF) inference, persistent CPU **Whisper** transcription, per-profile **SQLite** memory, and cryptographically verified updates.
 
 ## Overview & Architecture
 
-- **Model Context Protocol (MCP) Client:** Native stdio, HTTP, and SSE MCP client (`@modelcontextprotocol/client` v2.3.1) with OAuth support, explicit tool-write confirmation per call, and structured handoffs between assistants.
+- **Native MCP Server for Claude Desktop & Claude Code:** Standalone stdio JSON-RPC 2.0 server ([`integrations/mcp-server.cjs`](integrations/mcp-server.cjs)) exposing 7 human-reviewed tools (`app_status`, `list_assistants`, `prepare_session`, `prepare_summary`, `prepare_code_review`, `prepare_followup`, `propose_assistant`) and an atomic, SHA-256 drift-safe installer ([`lib/connectors/client-install.cjs`](lib/connectors/client-install.cjs)) targeting **Claude Desktop** (`claude_desktop_config.json`), **Claude Code** (`~/.claude.json`), **Cursor**, and **Codex**. See [MCP & Claude Integration Architecture](docs/MCP_CLAUDE_ARCHITECTURE.md).
+- **Model Context Protocol (MCP) Client:** Native stdio, SSE, and StreamableHTTP MCP client ([`lib/connectors/mcp.cjs`](lib/connectors/mcp.cjs), `@modelcontextprotocol/client` v2.3.1) with OAuth 2.0 PKCE loopback auth, pagination cycle protection, and explicit tool-write confirmation per call.
 - **Local AI & Model Runtimes:** Built-in **llama.cpp** runtime supporting CPU and Vulkan GGUF inference (with automatic CPU fallback), verified GGUF model downloads/imports, idle model unloading, and optional **Ollama** or compatible local/cloud endpoints.
 - **Local Speech & Transcription:** Persistent CPU **Whisper** engine with seven integrity-checked models, Voice Activity Detection (VAD), partial/final transcripts, custom vocabulary, dual audio-source capture, translation, and turn-based local speech synthesis (`System.Speech` / Chromium fallback).
 - **Per-Profile SQLite Memory & Knowledge Base:** Isolated SQLite storage per profile with paginated search, statistics, Markdown export, reversible memory compaction, permanent assistant knowledge files, and local PDF text extraction (`pdfjs-dist`).
@@ -26,7 +27,7 @@ npm start
 
 - `npm run prepareNative` downloads and verifies official runtimes/models, builds the audio helper, and prepares `llama.cpp`.
 - `npm run build` packages NSIS and Portable Windows installers (`--publish never`).
-- Full documentation in Portuguese: [Configuration Guide](docs/configuracao.md), [Integrations](docs/integrations.md), [102-Item Implementation Matrix](docs/matriz-implementacao.md), and [Release Process](docs/release.md).
+- Architecture & Guides: [MCP & Claude Integration Architecture](docs/MCP_CLAUDE_ARCHITECTURE.md), [Configuration Guide (PT-BR)](docs/configuracao.md), [Integrations (PT-BR)](docs/integrations.md), [102-Item Implementation Matrix (PT-BR)](docs/matriz-implementacao.md), and [Release Process (PT-BR)](docs/release.md).
 
 ## License
 
