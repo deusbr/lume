@@ -1,5 +1,10 @@
 # Lume Desktop 0.2.0 — Open-Source Local AI & Model Context Protocol (MCP) Desktop Assistant
 
+[![CI](https://github.com/deusbr/lume/actions/workflows/ci.yml/badge.svg)](https://github.com/deusbr/lume/actions/workflows/ci.yml)
+[![Release](https://github.com/deusbr/lume/actions/workflows/release.yml/badge.svg)](https://github.com/deusbr/lume/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js 24](https://img.shields.io/badge/node-24-339933?logo=node.js&logoColor=white)](package.json)
+
 [English](#lume-desktop-020--open-source-local-ai--model-context-protocol-mcp-desktop-assistant) | [Português (BR)](#lume-desktop-020)
 
 **Lume Desktop** is an MIT-licensed, privacy-first Windows x64 AI desktop assistant built with **Electron** and **Node.js 24**. It implements **bidirectional Model Context Protocol (MCP)** interoperability — serving 7 human-in-the-loop tools directly to **Claude Desktop** and **Claude Code** while connecting assistants to external MCP servers (`@modelcontextprotocol/client` v2.3.1), local **llama.cpp** (CPU/Vulkan GGUF) inference, persistent CPU **Whisper** transcription, per-profile **SQLite** memory, and cryptographically verified updates.

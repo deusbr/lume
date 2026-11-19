@@ -2,8 +2,8 @@
   "name": "lume-desktop",
   "productName": "Lume",
   "version": "0.2.0",
-  "description": "Assistente desktop pessoal com conta ChatGPT, contexto de tela e transcrição local.",
-  "author": "Lume contributors",
+  "description": "Open-source Windows desktop AI assistant with bidirectional Model Context Protocol (MCP) support, local Whisper transcription, llama.cpp (CPU/Vulkan GGUF) inference, SQLite memory, and Ed25519-verified updates.",
+  "author": "Emerson Almeida <https://github.com/deusbr>",
   "license": "MIT",
   "main": "electron/main.cjs",
   "scripts": {
