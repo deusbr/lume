@@ -1,0 +1,19 @@
+name: Bug Report
+description: Report a reproducible bug in lume
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Concise description of the issue and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction Steps & Environment
+      description: OS, Node.js version, exact command run, and test output (`node --test tests/*.test.cjs`).
+    validations:
+      required: true
